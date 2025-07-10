@@ -2,5 +2,7 @@
 
 # DEV
 1. Clonar el .env.template como .env
-2. levanta el proyecto con ``` npm run dev ```
-3. Para ejecutar base de datos ```docker-compose up -d```
+2. instalar proyecto y dependencias con ``` npm install ```
+3. levanta el proyecto con ``` npm run dev ```
+4. Para ejecutar base de datos ```docker-compose up -d```
+5. Crear una migracion con prisma ``` npx prisma migrate dev --name init ```
