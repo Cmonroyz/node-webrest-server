@@ -3,7 +3,7 @@
 node_modules/
 keys/
 .env
-postgres/
+/postgres
 /src/generated/prisma
 
 /src/generated/prisma
