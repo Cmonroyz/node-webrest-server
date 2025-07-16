@@ -1,33 +1,47 @@
 import { Request, Response } from "express";
 import { prisma } from "../../data/postgres";
 import { CreateTodoDto, UpdateTodoDto } from "../../domain/dtos";
+import { TodoRepository } from "../../domain";
 
 export class TodosController {
 
-  constructor() {}
+  constructor(
+    private readonly todoRepository: TodoRepository,
+  ) {}
 
   public getTodos = async (req: Request, res: Response) => {
-    const todos = await prisma.todo.findMany();
+    // Actualmente utilizamos Prisma directamente aquí
+    //const todos = await prisma.todo.findMany();
+
+    // En su lugar puedo usar el repositorio que hemos creado para la abstraccion.
+    const todos = await this.todoRepository.getAll();
     res.json(todos);
   };
 
   public getTodoById = async (req: Request, res: Response) => {
     const id = +req.params.id;
-    if (isNaN(id)) {
-      res.status(400).json({ error: 'ID argument is not a number' });
-      return;
+    // Realizamos la validacion del ID
+    // if (isNaN(id)) {
+    //   res.status(400).json({ error: 'ID argument is not a number' });
+    //   return;
+    // }
+    // Utilizamos el repositorio directamente para obtener el TODO por ID
+    // const todo = await prisma.todo.findFirst({
+    //   where: { id }
+    // });
+    // if (!todo) {
+    //   res.status(404).json({ error: `TODO with id ${id} not found` });
+    //   return;
+    // }
+    // res.json(todo);
+
+    // Vamos a abstraer rl acceso al repositorio con una validadion try catch
+    try {
+      const todo = await this.todoRepository.findById(id);
+      res.json(todo);
+    } catch (error) {
+      res.status(400).json({ error: `TODO with id ${id} not found`});
     }
-
-    const todo = await prisma.todo.findFirst({
-      where: { id }
-    });
-
-    if (!todo) {
-      res.status(404).json({ error: `TODO with id ${id} not found` });
-      return;
-    }
-
-    res.json(todo);
   };
 
   public createTodo = async (req: Request, res: Response) => {
