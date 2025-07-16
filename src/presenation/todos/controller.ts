@@ -3,6 +3,9 @@ import { prisma } from "../../data/postgres";
 import { CreateTodoDto, UpdateTodoDto } from "../../domain/dtos";
 import { TodoRepository } from "../../domain";
 
+// LA arquitectura actual del controlador es DDD (Domain Driven Design),
+// por lo que el controlador no depende directamente de Prisma,
+// sino que utiliza un repositorio que abstrae el acceso a los datos.
 export class TodosController {
 
   constructor(
