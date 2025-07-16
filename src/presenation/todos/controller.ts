@@ -46,14 +46,16 @@ export class TodosController {
 
   public createTodo = async (req: Request, res: Response) => {
     const [error, createTodoDto] = CreateTodoDto.create(req.body);
-    if (error) {
-      res.status(400).json({ error });
-      return;
-    }
+    // Validamos si hubo un error al crear el DTO
+    if (error) return res.status(400).json({ error });
+    // Utilizo prima para crear el TODO
+    // const todo = await prisma.todo.create({
+    //   data: createTodoDto!
+    // });
+    // res.json(todo);
 
-    const todo = await prisma.todo.create({
-      data: createTodoDto!
-    });
+    // En su lugar puedo usar el repositorio que hemos creado para la abstraccion
+    const todo = await this.todoRepository.create(createTodoDto!);
     res.json(todo);
   };
 
